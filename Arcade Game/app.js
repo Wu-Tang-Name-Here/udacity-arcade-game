@@ -1,54 +1,50 @@
 var Game = function() {
     this.gameOver = false;
     this.gameWin = false;
-}
+};
 
 // Enemies our player must avoid
-var Enemy = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
+var Enemy = function(x,y) {
 
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
+    //sets image for enemy
     this.sprite = 'images/enemy-bug.png';
 
+    //set enemy positions
     this.x = x;
     this.y = y;
 
+    //speed multiplier
     this.multiplier = Math.floor((Math.random() * 5) + 1);
 };
-// Update the enemy's position, required method for game
+
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
 
     this.x = this.x + 101 * dt * this.multiplier;
 
     if (this.y == player.y && (this.x > player.x - 20 && this.x < player.x + 20)){
-        game.gameOver = true;
-       } else {
-        player.reset
+
+        player.reset();
     }
     if (this.x > 505) {
         this.reset();
     }
 
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
 };
-
+// Calculates random bug movement
 Enemy.prototype.reset = function() {
     this.x = -200;
     var yVals = [220, 140, 60];
-    this.y = yVals[Math.floor((Math.random() * 3))]
+    this.y = yVals[Math.floor((Math.random() * 3))];
     this.multiplier = Math.floor((Math.random() * 5) + 1);
-}
+};
 
-// Draw the enemy on the screen, required method for game
+// Draw the enemy on the screen
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+//////Player class/////
 var Player = function(x,y) {
 
     this.sprite = 'images/char-boy.png';
@@ -60,6 +56,16 @@ var Player = function(x,y) {
     this.yo = y;
 };
 
+// Once player reaches water, alert will pop up
+Player.prototype.playerWin = function() {
+    if (this.y <= 0) {
+        alert("You Win! Press Okay to play again.")
+        this.reset()
+        console.log("You Win!")
+    }
+}
+
+// Moves player one tile when directional buttons pushed
 Player.prototype.handleInput = function(dir) {
 
         if (dir == 'up') {
@@ -71,25 +77,23 @@ Player.prototype.handleInput = function(dir) {
         } else if (dir == 'right') {
             this.x = this.x + 101;
         }
-
+// Resets if player goes off screen
         if(this.x < 0) {
             this.x = 0;
 
-        } else if (this.x > 606) {
-            this.x = 606
+        } else if (this.x > 404) {
+            this.reset();
 
         } else if (this.y > 404) {
             this.reset();
 
-        }
-        var win = true;
-
-        if (win) {
-            game.gameWin = true;
+        } else if (this.y < 0) {
+            this.y = 0;
         }
 
 };
 
+// Draw player on the screen
 Player.prototype.reset = function() {
 
     this.x = this.xo;
@@ -100,21 +104,16 @@ Player.prototype.reset = function() {
 };
 
 Player.prototype.update = function(){
-    this.x = this.x;
-    this.y = this.y;
+    this.playerWin();
+
 };
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-
 // This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+// Player.handleInput() method.
 document.addEventListener('keyup', function(e) {
 
     var allowedKeys = {
@@ -144,5 +143,5 @@ var xVals = [0, 101, 202, 303, 404, 505, 606];
 
 var xyLocations = [];
 
-
+var winPositions = [[101, 35], [202, 35], [303, 35], [404, 35], [505,35]];
 var game = new Game();
