@@ -4,7 +4,7 @@ This is a project created by Einar Sevilla for the Udacity Arcade Game Project.
 
 # To run the game
 
-1. Download the folder "Arcade Game," which contians all files needed to play the game locally. 
+1. Download the folder "Arcade Game," which contains all files needed to play the game locally. 
 
 2. Open the file named "index.html"
 
